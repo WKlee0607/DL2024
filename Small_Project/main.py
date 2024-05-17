@@ -33,7 +33,10 @@ print('==> Preparing data..')
 transform_train = transforms.Compose([
     transforms.RandomCrop(32, padding=4), 
     transforms.RandomHorizontalFlip(),
+    #transforms.RandomRotation(10), # 추가
+    #transforms.RandomAffine(0, shear=10, scale=(0.8, 1.2)), # 추가
     AutoAugment(),
+    # Cutout(),
     transforms.ToTensor(),
     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
 ])
