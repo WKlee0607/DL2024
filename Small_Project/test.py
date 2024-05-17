@@ -8,10 +8,16 @@ import torchvision.transforms as transforms
 from models import *
 from utils import progress_bar
 
+# params
 m_name = "ResNet20" 
 print(f"Test Model {m_name}")
-num_workers = 2
 
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+num_workers = 2
+best_test_acc = 0
+
+
+# Datasets
 transform_test = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
@@ -25,9 +31,7 @@ testloader = torch.utils.data.DataLoader(
 classes = ('plane', 'car', 'bird', 'cat', 'deer',
            'dog', 'frog', 'horse', 'ship', 'truck')
 
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
-
-
+# models
 net = ResNet20()
 net.to(device)
 
@@ -35,16 +39,16 @@ if device == 'cuda':
     net = torch.nn.DataParallel(net)
     cudnn.benchmark = True
 
-device_torch = torch.device(device)
 checkpoint = torch.load(f"./checkpoint/ckpt_{m_name}.pth")
 net.load_state_dict(checkpoint['net'])
 best_acc = checkpoint['acc']
-start_epoch = checkpoint['epoch']
-print(f"best_val_acc: {best_acc}, saved_epoch:{start_epoch}")
+saved_epoch = checkpoint['epoch']
+print(f"best_val_acc: {best_acc}, saved_epoch:{saved_epoch+1}")
 
+# Test Settings
 criterion = nn.CrossEntropyLoss()
-best_test_acc = 0
 
+# Test
 def test():
     net.eval()
     test_loss = 0

@@ -2,8 +2,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-# This ResNet model is for small Datasets like CIFAL10.
-
 # Residual Block
 class BasicBlock(nn.Module):
     expansion = 1
