@@ -58,7 +58,6 @@ class ResNet(nn.Module):
             self.in_planes = planes * block.expansion
         return nn.Sequential(*layers)
 
-
     def weight_init(self):
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
